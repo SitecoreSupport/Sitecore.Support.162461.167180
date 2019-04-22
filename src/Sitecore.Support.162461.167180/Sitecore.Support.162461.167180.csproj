@@ -78,6 +78,12 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExM\Framework\Formatters\DateMode.cs" />
+    <Compile Include="ExM\Framework\Formatters\DateTimeFormatter.cs" />
+    <Compile Include="ExM\Framework\Formatters\DateTimeFormatterOptions.cs" />
+    <Compile Include="ExM\Framework\Formatters\DateTimeInfo.cs" />
+    <Compile Include="EmailCampaign\Server\Controllers\Localization\DateTimeInfoController.cs" />
+    <Compile Include="ExM\Framework\Formatters\IDateTimeFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +91,7 @@
     <Content Include="sitecore\shell\client\Applications\ECM\EmailCampaign.Client\Assets\CSS\CampaignReportPage.css" />
     <Content Include="sitecore\shell\client\Applications\ECM\EmailCampaign.Client\Assets\CSS\CampaignReportPage.min.css" />
     <Content Include="sitecore\shell\client\Applications\ECM\EmailCampaign.Client\FormatterConfigExtension.js" />
+    <Content Include="sitecore\shell\client\Applications\ECM\EmailCampaign.Client\Helpers\DateTimeFormatter.js" />
     <Content Include="sitecore\shell\client\Applications\ECM\EmailCampaign.Client\Models\TimeOfDayListModel.js" />
     <Content Include="sitecore\shell\client\Applications\ECM\EmailCampaign.Controls\Reporting\Charts\TimeOfDay\TimeOfDay.js" />
     <Content Include="sitecore\shell\client\Applications\ECM\EmailCampaign.Controls\Reporting\TimeOfDayRate\TimeOfDayRate.js" />
