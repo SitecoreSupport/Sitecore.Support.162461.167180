@@ -5,10 +5,18 @@
     '/-/speak/v1/ecm/MathHelper.js',
     '/-/speak/v1/ecm/constants.js',
     '/-/speak/v1/ecm/ReportDataService.js',
-    '/-/speak/v1/ecm/TimeOfDayReportBase.js'
-], function (backbone, sitecore, ChartDataConversionService, MathHelper, Constants, ReportDataService, TimeOfDayReportBase) {
+    '/-/speak/v1/ecm/TimeOfDayReportBase.js',
+    "/-/speak/v1/ecm/DateTimeFormatter.js"
+], function (backbone, sitecore, ChartDataConversionService, MathHelper, Constants, ReportDataService, TimeOfDayReportBase, DateTimeFormatter) {
     var model = TimeOfDayReportBase.model.extend({
         processData: function(data) {
+            for (var idx in data) {
+                if (data.hasOwnProperty(idx)) {
+                    var item = data[idx];
+                    item.key = DateTimeFormatter.utcToLocalHour(item.key);
+                }
+            }
+
             var emptyItem = {
                 click: 0,
                 itemsCount: 0,
@@ -19,6 +27,7 @@
             var processed = _.map(_.range(0, 24),
                 function (hour) {
                     var item = _.findWhere(data, { key: hour });
+
                     if (item) {
                         return item;
                     } else {
@@ -28,6 +37,7 @@
                         }
                     }
                 });
+
             return processed;
         },
 
@@ -58,7 +68,8 @@
                     { keys: this.model.get('eventType').split('|') }
                 );
             }
-
+            var metricsFormat = this.children.LineChart.viewModel.getMetrics();
+            metricsFormat.xOptions.numberScale = 'Time:AMPM';
             this.children.LineChart.set("dynamicData", hoursChartData);
         }
     });

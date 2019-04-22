@@ -1,13 +1,14 @@
 ﻿define([
     'sitecore',
     '/-/speak/v1/ecm/TimeOfDayReportBase.js',
-    '/-/speak/v1/ecm/ReportDataService.js',
-    '/-/speak/v1/ecm/MathHelper.js'
-], function (sitecore, TimeOfDayReportBase, ReportDataService, MathHelper) {
+    "/-/speak/v1/ecm/DateTimeFormatter.js"
+], function (sitecore, TimeOfDayReportBase, DateTimeFormatter) {
     var model = TimeOfDayReportBase.model.extend({
         reCalculate: function() {
             var group = this.getHourGroup(),
                 data = group.orderBy(this.get('eventType')).top(1);
+
+            data[0].key = DateTimeFormatter.utcToLocalHour(data[0].key);
             this.set('bestTimeOfDay', data[0]);
         }
     });
@@ -27,12 +28,21 @@
         },
         update: function() {
             var bestTimeOfDay = this.model.get('bestTimeOfDay');
-            
+
             if (bestTimeOfDay) {
                 var hour = Number(bestTimeOfDay.key),
-                visits = bestTimeOfDay.value[this.model.get('eventType')];
+                    visits = bestTimeOfDay.value[this.model.get('eventType')];
+                var timePeriod = DateTimeFormatter.formatHourAmPm(hour);
+                timePeriod += ' - ';
+                if (hour === 23) {
+                    timePeriod += DateTimeFormatter.formatHourAmPm(0);
+                } else {
+                    timePeriod += DateTimeFormatter.formatHourAmPm(hour + 1);
+                }
 
-                this.children.ScoreCard.set('value', hour + ':00' + '-' + (hour + 1) + ':00');
+                timePeriod += DateTimeFormatter.getUtcOffset();
+
+                this.children.ScoreCard.set('value', timePeriod);
                 this.children.ScoreCard.set(
                     'description',
                     visits +

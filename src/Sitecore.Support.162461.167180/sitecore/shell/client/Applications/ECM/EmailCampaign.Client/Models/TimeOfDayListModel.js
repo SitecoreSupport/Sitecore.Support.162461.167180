@@ -1,20 +1,23 @@
 ﻿define([
     "sitecore",
-    "/-/speak/v1/ecm/ReportingListDataModel.js"
+    "jquery",
+    "/-/speak/v1/ecm/ReportingListDataModel.js",
+    "/-/speak/v1/ecm/DateTimeFormatter.js"
 ], function (
     sitecore,
-    ReportingListDataModel
-    ) {
+    $,
+    ReportingListDataModel,
+    DateTimeFormatter
+) {
 
     var dayNames = [
+        "ECM.DayNames.Sunday",
         "ECM.DayNames.Monday",
         "ECM.DayNames.Tuesday",
         "ECM.DayNames.Wednesday",
         "ECM.DayNames.Thursday",
         "ECM.DayNames.Friday",
-        "ECM.DayNames.Saturday",
-        "ECM.DayNames.Sunday"
-    ];
+        "ECM.DayNames.Saturday"];
 
     var TimeOfDayListModel = ReportingListDataModel.extend({
         initialize: function() {
@@ -29,21 +32,24 @@
             this._super(item);
         },
         setDayName: function(item) {
-            item.dayOfWeek = dayNames[item.dayOfWeek - 1];
+            item.dayOfWeek = dayNames[item.dayOfWeek];
         },
         setHourRange: function(item) {
-            item.hourRange = item.hour + ":00 - ";
-            if (item.hour === 23) {
-                item.hourRange += 0 + ":00";
+            item._hour = DateTimeFormatter.utcToLocalHour(item.hour);
+
+            item.hourRange = DateTimeFormatter.formatHourAmPm(item._hour) + " - ";
+            if (item._hour === 23) {
+                item.hourRange += DateTimeFormatter.formatHourAmPm(12);
             } else {
-                item.hourRange += (item.hour + 1) + ":00";
+                item.hourRange += DateTimeFormatter.formatHourAmPm(item._hour + 1);
             }
+            item.hourRange += DateTimeFormatter.getUtcOffset();
         }
     });
 
     /* test-code */
     TimeOfDayListModel._dayNames = dayNames;
     /* end-test-code */
-    
+
     return TimeOfDayListModel;
 });

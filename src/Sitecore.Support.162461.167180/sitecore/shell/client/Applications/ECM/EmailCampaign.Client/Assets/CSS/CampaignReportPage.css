@@ -315,3 +315,10 @@ div.row[data-sc-id="RecipientActivityRowPanel"] > div[data-sc-id="ActivityCardsC
 [data-sc-id=CampaignReportRecipientActivityBorder] [data-sc-id=EventListsSubTabs] {
   margin-top: 15px;
 }
+[data-sc-id=TimeOfDayActivityCard] [data-sc-id=TimeOfDayRow] {
+  margin-top: -15px;
+}
+[data-sc-id=TimeOfDayActivityCard] [data-sc-id=TimeOfDayRow] .sc-text[data-sc-id$=TextValue] {
+  width: 110px;
+  display: inline-block;
+}
